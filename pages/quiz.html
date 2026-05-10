@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>答题闯关 - 中华56民族</title>
+  <meta name="description" content="通过答题闯关，测试和提升你对民族文化的了解程度。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .quiz-page {
+      padding-top: 64px;
+      min-height: 100vh;
+      background-image: url('../images/1.背景2.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .page-header {
+      background: rgba(156, 39, 176, 0.85);
+      color: white;
+      padding: var(--spacing-xxl) 0;
+      text-align: center;
+    }
+
+    .quiz-section {
+      padding: var(--spacing-xxl) 0;
+    }
+
+    .quiz-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .quiz-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-xl);
+      padding: var(--spacing-md);
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .progress-info {
+      display: flex;
+      gap: var(--spacing-md);
+      align-items: center;
+    }
+
+    .progress-label {
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .progress-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-zhu-red);
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--background-color);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+      margin: 0 var(--spacing-lg);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-zhu-red), #9C27B0);
+      border-radius: var(--radius-full);
+      transition: width 0.3s ease;
+    }
+
+    .quiz-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .quiz-question {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-xl);
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+
+    .quiz-options {
+      display: grid;
+      gap: var(--spacing-md);
+    }
+
+    .quiz-option {
+      padding: var(--spacing-lg);
+      border: 2px solid #ddd;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .quiz-option:hover {
+      border-color: var(--color-zhu-red);
+      background: rgba(211, 47, 47, 0.05);
+    }
+
+    .quiz-option.selected {
+      border-color: var(--color-zhu-red);
+      background: rgba(211, 47, 47, 0.1);
+    }
+
+    .quiz-option.correct {
+      border-color: #4CAF50;
+      background: rgba(76, 175, 80, 0.1);
+    }
+
+    .quiz-option.wrong {
+      border-color: #f44336;
+      background: rgba(244, 67, 54, 0.1);
+    }
+
+    .option-letter {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--background-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .quiz-option.selected .option-letter {
+      background: var(--color-zhu-red);
+      color: white;
+    }
+
+    .quiz-option.correct .option-letter {
+      background: #4CAF50;
+      color: white;
+    }
+
+    .quiz-option.wrong .option-letter {
+      background: #f44336;
+      color: white;
+    }
+
+    .quiz-actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-xl);
+    }
+
+    .quiz-btn {
+      padding: var(--spacing-md) var(--spacing-xl);
+      border-radius: var(--radius-full);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all var(--transition-fast);
+      min-width: 150px;
+    }
+
+    .quiz-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .quiz-btn-primary {
+      background: var(--color-zhu-red);
+      color: white;
+    }
+
+    .quiz-btn-primary:hover:not(:disabled) {
+      background: #B71C1C;
+      transform: translateY(-2px);
+    }
+
+    .quiz-btn-secondary {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 2px solid #ddd;
+    }
+
+    .quiz-btn-secondary:hover:not(:disabled) {
+      border-color: var(--text-secondary);
+      background: var(--background-color);
+    }
+
+    /* 结果页面 */
+    .result-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+    }
+
+    .result-score {
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--color-zhu-red);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .result-total {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .result-message {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-lg);
+      color: var(--text-primary);
+    }
+
+    .result-details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+      padding: var(--spacing-lg);
+      background: var(--background-color);
+      border-radius: var(--radius-md);
+    }
+
+    .result-detail-item {
+      text-align: center;
+    }
+
+    .detail-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-zhu-red);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .detail-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* 开始页面 */
+    .start-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+    }
+
+    .start-icon {
+      font-size: 5rem;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .start-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-md);
+      color: var(--text-primary);
+    }
+
+    .start-description {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-xl);
+      line-height: 1.6;
+    }
+
+    .difficulty-selector {
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .difficulty-btn {
+      padding: var(--spacing-sm) var(--spacing-lg);
+      border: 2px solid #ddd;
+      border-radius: var(--radius-full);
+      background: white;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      transition: all var(--transition-fast);
+    }
+
+    .difficulty-btn:hover,
+    .difficulty-btn.active {
+      border-color: var(--color-zhu-red);
+      color: var(--color-zhu-red);
+      background: rgba(211, 47, 47, 0.1);
+    }
+
+    .start-btn-large {
+      padding: var(--spacing-md) var(--spacing-xxl);
+      background: var(--color-zhu-red);
+      color: white;
+      border-radius: var(--radius-full);
+      font-size: 1.125rem;
+      font-weight: 600;
+      transition: all var(--transition-normal);
+    }
+
+    .start-btn-large:hover {
+      background: #B71C1C;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+    }
+
+    /* 隐藏类 */
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- 头部导航 -->
+  <header class="header">
+    <div class="container header-content">
+      <a href="../index.html" class="logo">
+        <div class="logo-icon">民</div>
+        <span>中华56民族</span>
+      </a>
+      
+      <nav class="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="nations.html" class="nav-link">民族名录</a>
+        <a href="culture.html" class="nav-link">文化专题</a>
+        <a href="timeline.html" class="nav-link">历史时间轴</a>
+        <a href="interactive.html" class="nav-link">互动体验</a>
+        <a href="quiz.html" class="nav-link active">答题闯关</a>
+        <a href="shop.html" class="nav-link">特色商品</a>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="search-box">
+          <input type="text" placeholder="搜索民族、文化...">
+          <button class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div class="mobile-menu">
+    <a href="../index.html" class="nav-link">首页</a>
+    <a href="nations.html" class="nav-link">民族名录</a>
+    <a href="culture.html" class="nav-link">文化专题</a>
+    <a href="timeline.html" class="nav-link">历史时间轴</a>
+    <a href="interactive.html" class="nav-link">互动体验</a>
+    <a href="quiz.html" class="nav-link active">答题闯关</a>
+    <a href="shop.html" class="nav-link">特色商品</a>
+  </div>
+
+  <!-- 主要内容 -->
+  <main class="quiz-page">
+    <!-- 页面头部 -->
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">答题闯关</h1>
+        <p class="page-description">测试和提升你对民族文化的了解程度</p>
+      </div>
+    </div>
+
+    <!-- 答题区域 -->
+    <section class="quiz-section">
+      <div class="container">
+        <div class="quiz-container">
+          <!-- 开始页面 -->
+          <div id="startPage" class="start-card">
+            <div class="start-icon">🎯</div>
+            <h2 class="start-title">民族文化知识挑战</h2>
+            <p class="start-description">
+              通过答题闯关，测试你对中华各民族文化的了解程度。<br>
+              共有5道题目，答对得分，答错不扣分。
+            </p>
+            <div class="difficulty-selector">
+              <button class="difficulty-btn active" data-difficulty="easy">简单</button>
+              <button class="difficulty-btn" data-difficulty="medium">中等</button>
+              <button class="difficulty-btn" data-difficulty="hard">困难</button>
+            </div>
+            <button class="start-btn-large" id="startQuizBtn">开始挑战</button>
+          </div>
+
+          <!-- 答题页面 -->
+          <div id="quizPage" class="hidden">
+            <div class="quiz-progress">
+              <div class="progress-info">
+                <span class="progress-label">题目</span>
+                <span class="progress-value" id="currentQuestion">1</span>
+                <span class="progress-label">/</span>
+                <span class="progress-value" id="totalQuestions">5</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 10%"></div>
+              </div>
+              <div class="progress-info">
+                <span class="progress-label">得分</span>
+                <span class="progress-value" id="currentScore">0</span>
+              </div>
+            </div>
+
+            <div class="quiz-card">
+              <h3 class="quiz-question" id="quizQuestion">
+                题目内容将在这里显示
+              </h3>
+              <div class="quiz-options" id="quizOptions">
+                <!-- 选项将由JS动态生成 -->
+              </div>
+            </div>
+
+            <div class="quiz-actions">
+              <button class="quiz-btn quiz-btn-primary" id="submitBtn" disabled>提交答案</button>
+              <button class="quiz-btn quiz-btn-primary hidden" id="nextBtn">下一题</button>
+            </div>
+          </div>
+
+          <!-- 结果页面 -->
+          <div id="resultPage" class="hidden">
+            <div class="result-card">
+              <div class="result-score" id="finalScore">0</div>
+              <div class="result-total">/ 100 分</div>
+              <h2 class="result-message" id="resultMessage">恭喜完成！</h2>
+              
+              <div class="result-details">
+                <div class="result-detail-item">
+                  <div class="detail-value" id="correctCount">0</div>
+                  <div class="detail-label">答对</div>
+                </div>
+                <div class="result-detail-item">
+                  <div class="detail-value" id="wrongCount">0</div>
+                  <div class="detail-label">答错</div>
+                </div>
+                <div class="result-detail-item">
+                  <div class="detail-value" id="accuracyRate">0%</div>
+                  <div class="detail-label">正确率</div>
+                </div>
+              </div>
+
+              <div class="quiz-actions">
+                <button class="quiz-btn quiz-btn-secondary" id="reviewBtn">查看答案</button>
+                <button class="quiz-btn quiz-btn-primary" id="restartBtn">重新挑战</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="protection-banner">
+        <div class="container">
+          <div class="protection-content">
+            <span class="protection-icon">🤝</span>
+            <span class="protection-text">
+              铸牢中华民族共同体意识，促进各民族像石榴籽一样紧紧抱在一起
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-icon">民</div>
+            <span>中华56民族</span>
+          </div>
+          <p class="footer-description">
+            致力于记录、展示和传承中国各民族的文化遗产，促进民族团结与文化交流。
+          </p>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">快速导航</h4>
+          <div class="footer-links">
+            <a href="nations.html" class="footer-link">民族名录</a>
+            <a href="culture.html" class="footer-link">文化专题</a>
+            <a href="timeline.html" class="footer-link">历史时间轴</a>
+            <a href="quiz.html" class="footer-link">答题闯关</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">关于我们</h4>
+          <div class="footer-links">
+            <a href="about.html" class="footer-link">项目介绍</a>
+            <a href="about.html#team" class="footer-link">团队成员</a>
+            <a href="about.html#contact" class="footer-link">联系方式</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">相关链接</h4>
+          <div class="footer-links">
+            <a href="https://www.gov.cn" target="_blank" class="footer-link">中国政府网</a>
+            <a href="https://www.nlc.cn" target="_blank" class="footer-link">国家图书馆</a>
+            <a href="https://www.ihchina.cn" target="_blank" class="footer-link">中国非遗网</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 中华56民族. 保留所有权利. | 致力于民族文化传承与保护</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/quiz.js"></script>
+
+  <!-- 答案回顾模态框 -->
+  <div id="answerModal" style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  ">
+    <div style="
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      max-width: 900px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    ">
+      <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-xl);
+      ">
+        <h3 style="
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: var(--text-primary);
+          margin: 0;
+        ">答题回顾</h3>
+        <button id="closeModal" style="
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: var(--text-secondary);
+        ">&times;</button>
+      </div>
+      <div id="answerHistoryContent"></div>
+    </div>
+  </div>
+</body>
+</html>

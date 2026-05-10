@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史时间轴 - 中华56民族</title>
+  <meta name="description" content="追溯中国各民族的发展脉络，见证中华民族多元一体的历史进程。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .timeline-page {
+      padding-top: 64px;
+      min-height: 100vh;
+      background: url('../images/历史感背景图22.jpg') center/cover no-repeat fixed;
+    }
+
+    .page-header {
+      background: url('../images/历史感背景图22.jpg') center/cover no-repeat fixed;
+      color: white;
+      padding: var(--spacing-xxl) 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1;
+    }
+
+    .page-header .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .timeline-section {
+      padding: var(--spacing-xxl) 0;
+      background: transparent;
+    }
+
+    .timeline {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* 树干 - 加粗3倍 */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 36px;
+      background: linear-gradient(to right, #5D4037 0%, #6D4C41 15%, #8D6E63 30%, #A1887F 50%, #8D6E63 70%, #6D4C41 85%, #5D4037 100%);
+      border-radius: 18px;
+      box-shadow: 
+        inset -4px 0 8px rgba(0,0,0,0.4),
+        inset 4px 0 8px rgba(255,255,255,0.15),
+        4px 0 12px rgba(0,0,0,0.3),
+        0 0 20px rgba(0,0,0,0.2);
+    }
+
+    /* 树皮纹理 */
+    .timeline::after {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      bottom: 0;
+      width: 36px;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 3px,
+        rgba(0,0,0,0.15) 3px,
+        rgba(0,0,0,0.15) 4px
+      );
+      border-radius: 18px;
+      pointer-events: none;
+    }
+
+    @media (min-width: 768px) {
+      .timeline::before,
+      .timeline::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
+    /* 藤蔓环绕装饰 - 参考图片样式 */
+    .timeline {
+      position: relative;
+    }
+
+    /* 左侧藤蔓 - 在树干后面 */
+    .timeline .vine-left {
+      position: absolute;
+      left: 8px;
+      top: 5%;
+      width: 60px;
+      height: 90%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: visible;
+    }
+
+    /* 右侧藤蔓 - 在树干后面 */
+    .timeline .vine-right {
+      position: absolute;
+      left: 8px;
+      top: 10%;
+      width: 60px;
+      height: 85%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: visible;
+    }
+
+    /* 藤蔓SVG样式 */
+    .timeline .vine-left svg,
+    .timeline .vine-right svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* 藤蔓路径 */
+    .vine-path {
+      fill: none;
+      stroke: url(#vineGradient);
+      stroke-width: 16;
+      stroke-linecap: round;
+      filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.3));
+    }
+
+    /* 藤蔓叶子 */
+    .vine-leaf-svg {
+      fill: url(#leafGradient);
+      filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2));
+    }
+
+    @media (min-width: 768px) {
+      .timeline .vine-left {
+        left: 50%;
+        transform: translateX(calc(-50% - 48px));
+      }
+
+      .timeline .vine-right {
+        left: 50%;
+        transform: translateX(calc(-50% + 12px));
+      }
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: var(--spacing-xl);
+      padding-left: 60px;
+    }
+
+    @media (min-width: 768px) {
+      .timeline-item {
+        padding-left: 0;
+        width: 50%;
+      }
+
+      .timeline-item:nth-child(odd) {
+        padding-right: 40px;
+        text-align: right;
+      }
+
+      .timeline-item:nth-child(even) {
+        margin-left: 50%;
+        padding-left: 40px;
+      }
+    }
+
+    /* 树枝连接线 */
+    .timeline-item::after {
+      content: '🍃';
+      position: absolute;
+      left: 26px;
+      top: 12px;
+      width: 24px;
+      height: 24px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+      animation: leafSway 3s ease-in-out infinite;
+      transform-origin: center bottom;
+    }
+
+    @keyframes leafSway {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    @media (min-width: 768px) {
+      .timeline-item::after {
+        left: 50%;
+        transform: translateX(-50%);
+        transform-origin: center bottom;
+      }
+      
+      .timeline-item:nth-child(odd)::after {
+        animation: leafSwayLeft 3s ease-in-out infinite;
+      }
+      
+      .timeline-item:nth-child(even)::after {
+        animation: leafSwayRight 3s ease-in-out infinite;
+      }
+    }
+
+    @keyframes leafSwayLeft {
+      0%, 100% { transform: translateX(-50%) rotate(-10deg); }
+      50% { transform: translateX(-50%) rotate(0deg); }
+    }
+
+    @keyframes leafSwayRight {
+      0%, 100% { transform: translateX(-50%) rotate(0deg); }
+      50% { transform: translateX(-50%) rotate(10deg); }
+    }
+
+    .timeline-content {
+      background: url('../images/先秦.jpg') center/cover no-repeat;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      box-shadow: 
+        0 4px 6px rgba(0,0,0,0.1),
+        inset 0 0 0 200px rgba(255,255,255,0.6);
+      border: 1px solid rgba(139, 69, 19, 0.1);
+      position: relative;
+      margin-bottom: 60px;
+    }
+
+    .timeline-content::after {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 180px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 60px;
+      box-shadow: 
+        0 6px 12px rgba(0,0,0,0.15),
+        -45px 15px 0 rgba(255, 255, 255, 0.95),
+        45px 15px 0 rgba(255, 255, 255, 0.95),
+        -75px 5px 0 rgba(255, 255, 255, 0.95),
+        75px 5px 0 rgba(255, 255, 255, 0.95);
+      z-index: -1;
+      animation: cloudFloat 6s ease-in-out infinite;
+    }
+
+    .timeline-content::before {
+      content: '';
+      position: absolute;
+      bottom: -40px;
+      left: 30%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 40px;
+      box-shadow: 
+        0 4px 8px rgba(0,0,0,0.1),
+        -25px 10px 0 rgba(255, 255, 255, 0.9),
+        25px 10px 0 rgba(255, 255, 255, 0.9);
+      z-index: -1;
+      animation: cloudFloat2 8s ease-in-out infinite reverse;
+    }
+
+    .timeline-content:nth-child(even)::before {
+      left: 70%;
+    }
+
+    .timeline-content:nth-child(3n)::before {
+      width: 120px;
+      height: 45px;
+      bottom: -35px;
+    }
+
+    @keyframes cloudFloat {
+      0%, 100% { transform: translateX(-50%) translateY(0px); }
+      50% { transform: translateX(-50%) translateY(-5px); }
+    }
+
+    @keyframes cloudFloat2 {
+      0%, 100% { transform: translateX(-50%) translateY(0px); }
+      50% { transform: translateX(-50%) translateY(-8px); }
+    }
+
+    .timeline-content[data-period="当代发展"] {
+      box-shadow: 
+        0 4px 6px rgba(0,0,0,0.1),
+        inset 0 0 0 200px rgba(255,255,255,0.5);
+    }
+
+    /* 树叶装饰边框 */
+    .timeline-content::before {
+      content: '🌿';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 20px;
+      opacity: 0.6;
+      transform: rotate(45deg);
+    }
+
+    .timeline-content::after {
+      content: '🍂';
+      position: absolute;
+      bottom: -8px;
+      left: -8px;
+      font-size: 16px;
+      opacity: 0.5;
+      transform: rotate(-30deg);
+    }
+
+    .timeline-period {
+      display: inline-block;
+      padding: 4px 16px;
+      background: var(--color-zhu-red);
+      color: white;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .timeline-year {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .timeline-description {
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-md);
+      font-size: 0.95rem;
+    }
+
+    .timeline-events {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .timeline-event {
+      padding: var(--spacing-md);
+      background: var(--background-color);
+      border-radius: var(--radius-md);
+      border-left: 3px solid var(--color-zhu-red);
+    }
+
+    .timeline-event-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-xs);
+      color: var(--text-primary);
+    }
+
+    .timeline-event-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* 历史启示 */
+    .insights-section {
+      padding: var(--spacing-xxl) 0;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-xl);
+      margin-top: var(--spacing-xl);
+    }
+
+    .insight-card {
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+
+    .insight-card:first-child {
+      background: url('../images/56个民族.jpg') center/cover no-repeat;
+    }
+
+    .insight-card:nth-child(2) {
+      background: url('../images/文化交融.jpg') center/cover no-repeat;
+    }
+
+    .insight-card:nth-child(3) {
+      background: url('../images/共同发展.jpg') center/cover no-repeat;
+    }
+
+    .insight-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: var(--radius-lg);
+      z-index: 1;
+    }
+
+    .insight-card > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    .insight-icon {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .insight-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .insight-desc {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <!-- 头部导航 -->
+  <header class="header">
+    <div class="container header-content">
+      <a href="../index.html" class="logo">
+        <div class="logo-icon">民</div>
+        <span>中华56民族</span>
+      </a>
+      
+      <nav class="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="nations.html" class="nav-link">民族名录</a>
+        <a href="culture.html" class="nav-link">文化专题</a>
+        <a href="timeline.html" class="nav-link active">历史时间轴</a>
+        <a href="interactive.html" class="nav-link">互动体验</a>
+        <a href="quiz.html" class="nav-link">答题闯关</a>
+        <a href="shop.html" class="nav-link">特色商品</a>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="search-box">
+          <input type="text" placeholder="搜索民族、文化...">
+          <button class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div class="mobile-menu">
+    <a href="../index.html" class="nav-link">首页</a>
+    <a href="nations.html" class="nav-link">民族名录</a>
+    <a href="culture.html" class="nav-link">文化专题</a>
+    <a href="timeline.html" class="nav-link active">历史时间轴</a>
+    <a href="interactive.html" class="nav-link">互动体验</a>
+    <a href="quiz.html" class="nav-link">答题闯关</a>
+    <a href="shop.html" class="nav-link">特色商品</a>
+  </div>
+
+  <!-- 主要内容 -->
+  <main class="timeline-page">
+    <!-- 页面头部 -->
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">历史时间轴</h1>
+        <p class="page-description">追溯中国各民族的发展脉络，见证中华民族多元一体的历史进程</p>
+      </div>
+    </div>
+
+    <!-- 时间轴 -->
+    <section class="timeline-section">
+      <div class="container">
+        <div class="timeline" id="timeline">
+          <!-- 时间轴项目将由JS动态生成 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 历史启示 -->
+    <section class="insights-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">历史启示</h2>
+          <p class="section-subtitle">从历史中汲取智慧，共创美好未来</p>
+        </div>
+        <div class="insights-grid">
+          <div class="insight-card">
+            <div class="insight-icon">🤝</div>
+            <h3 class="insight-title">民族团结</h3>
+            <p class="insight-desc">各民族在长期历史发展中形成了你中有我、我中有你的命运共同体</p>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">🌏</div>
+            <h3 class="insight-title">文化交融</h3>
+            <p class="insight-desc">各民族文化交流互鉴，共同创造了灿烂的中华文明</p>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">🚀</div>
+            <h3 class="insight-title">共同发展</h3>
+            <p class="insight-desc">新时代各民族共同团结奋斗、共同繁荣发展</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="protection-banner">
+        <div class="container">
+          <div class="protection-content">
+            <span class="protection-icon">🤝</span>
+            <span class="protection-text">
+              铸牢中华民族共同体意识，促进各民族像石榴籽一样紧紧抱在一起
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-icon">民</div>
+            <span>中华56民族</span>
+          </div>
+          <p class="footer-description">
+            致力于记录、展示和传承中国各民族的文化遗产，促进民族团结与文化交流。
+          </p>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">快速导航</h4>
+          <div class="footer-links">
+            <a href="nations.html" class="footer-link">民族名录</a>
+            <a href="culture.html" class="footer-link">文化专题</a>
+            <a href="timeline.html" class="footer-link">历史时间轴</a>
+            <a href="quiz.html" class="footer-link">答题闯关</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">关于我们</h4>
+          <div class="footer-links">
+            <a href="about.html" class="footer-link">项目介绍</a>
+            <a href="about.html#team" class="footer-link">团队成员</a>
+            <a href="about.html#contact" class="footer-link">联系方式</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">相关链接</h4>
+          <div class="footer-links">
+            <a href="https://www.gov.cn" target="_blank" class="footer-link">中国政府网</a>
+            <a href="https://www.nlc.cn" target="_blank" class="footer-link">国家图书馆</a>
+            <a href="https://www.ihchina.cn" target="_blank" class="footer-link">中国非遗网</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 中华56民族. 保留所有权利. | 致力于民族文化传承与保护</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/timeline.js"></script>
+</body>
+</html>

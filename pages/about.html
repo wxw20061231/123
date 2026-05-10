@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>关于我们 - 中华56民族</title>
+  <meta name="description" content="了解中华56民族网站的项目介绍、团队成员和联系方式。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .about-page {
+      padding-top: 64px;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../images/about beijing.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: var(--spacing-xxl) 0;
+      text-align: center;
+    }
+
+    .about-section {
+      padding: var(--spacing-xxl) 0;
+    }
+
+    .about-content {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .intro-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .intro-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-lg);
+      text-align: center;
+      font-family: var(--font-family-title);
+    }
+
+    .intro-text {
+      font-size: 1.125rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-xl);
+    }
+
+    .mission-item {
+      text-align: center;
+      padding: var(--spacing-lg);
+      background: var(--background-color);
+      border-radius: var(--radius-md);
+    }
+
+    .mission-icon {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .mission-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .mission-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* 团队成员 */
+    .team-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-xl);
+      text-align: center;
+      font-family: var(--font-family-title);
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-xl);
+    }
+
+    .team-member {
+      text-align: center;
+      padding: var(--spacing-lg);
+      background: var(--background-color);
+      border-radius: var(--radius-lg);
+      transition: all var(--transition-normal);
+    }
+
+    .team-member:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .member-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-zhu-red), #B71C1C);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--spacing-lg);
+      color: white;
+      font-size: 3rem;
+      font-weight: 600;
+    }
+
+    .member-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .member-role {
+      font-size: 0.95rem;
+      color: var(--color-zhu-red);
+      margin-bottom: var(--spacing-md);
+      font-weight: 500;
+    }
+
+    .member-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* 联系方式 */
+    .contact-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-xl);
+      margin-top: var(--spacing-xl);
+    }
+
+    .contact-card {
+      padding: var(--spacing-lg);
+      background: var(--background-color);
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    .contact-icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--spacing-md);
+      color: var(--color-zhu-red);
+    }
+
+    .contact-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .contact-value {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .contact-link {
+      color: var(--color-zhu-red);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+
+    .contact-link:hover {
+      color: #B71C1C;
+      text-decoration: underline;
+    }
+
+    /* 技术栈 */
+    .tech-section {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-xl);
+    }
+
+    .tech-item {
+      text-align: center;
+      padding: var(--spacing-md);
+      background: var(--background-color);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+    }
+
+    .tech-item:hover {
+      background: #e8e6e3;
+      transform: scale(1.05);
+    }
+
+    .tech-icon {
+      font-size: 2rem;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .tech-name {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+  <!-- 头部导航 -->
+  <header class="header">
+    <div class="container header-content">
+      <a href="../index.html" class="logo">
+        <div class="logo-icon">民</div>
+        <span>中华56民族</span>
+      </a>
+      
+      <nav class="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="nations.html" class="nav-link">民族名录</a>
+        <a href="culture.html" class="nav-link">文化专题</a>
+        <a href="timeline.html" class="nav-link">历史时间轴</a>
+        <a href="interactive.html" class="nav-link">互动体验</a>
+        <a href="quiz.html" class="nav-link">答题闯关</a>
+        <a href="shop.html" class="nav-link">特色商品</a>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="search-box">
+          <input type="text" placeholder="搜索民族、文化...">
+          <button class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div class="mobile-menu">
+    <a href="../index.html" class="nav-link">首页</a>
+    <a href="nations.html" class="nav-link">民族名录</a>
+    <a href="culture.html" class="nav-link">文化专题</a>
+    <a href="timeline.html" class="nav-link">历史时间轴</a>
+    <a href="interactive.html" class="nav-link">互动体验</a>
+    <a href="quiz.html" class="nav-link">答题闯关</a>
+    <a href="shop.html" class="nav-link">特色商品</a>
+  </div>
+
+  <!-- 主要内容 -->
+  <main class="about-page">
+    <!-- 页面头部 -->
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">关于我们</h1>
+        <p class="page-description">了解中华56民族网站的项目介绍和团队信息</p>
+      </div>
+    </div>
+
+    <!-- 关于内容 -->
+    <section class="about-section">
+      <div class="container">
+        <div class="about-content">
+          <!-- 项目介绍 -->
+          <div class="intro-card">
+            <h2 class="intro-title">中华56民族</h2>
+            <p class="intro-text">
+              中华56民族网站致力于记录、展示和传承中国各民族的文化遗产，
+              促进民族团结与文化交流。我们希望通过数字化手段，
+              让更多人了解和欣赏中华民族多元一体的文化格局。
+            </p>
+            
+            <h3 style="text-align: center; margin-bottom: var(--spacing-lg); font-size: 1.25rem;">我们的使命</h3>
+            <div class="mission-grid">
+              <div class="mission-item">
+                <div class="mission-icon">📚</div>
+                <h4 class="mission-title">记录传承</h4>
+                <p class="mission-desc">系统记录各民族的历史文化</p>
+              </div>
+              <div class="mission-item">
+                <div class="mission-icon">🌐</div>
+                <h4 class="mission-title">传播推广</h4>
+                <p class="mission-desc">向世界展示民族文化魅力</p>
+              </div>
+              <div class="mission-item">
+                <div class="mission-icon">🤝</div>
+                <h4 class="mission-title">促进团结</h4>
+                <p class="mission-desc">增进民族文化交流理解</p>
+              </div>
+              <div class="mission-item">
+                <div class="mission-icon">🎓</div>
+                <h4 class="mission-title">教育普及</h4>
+                <p class="mission-desc">提供民族文化教育资源</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 团队成员 -->
+          <div class="team-section" id="team">
+            <h2 class="section-title">团队成员</h2>
+            <div class="team-grid">
+              <div class="team-member">
+                <div class="member-avatar">王</div>
+                <h4 class="member-name">王海佳</h4>
+                <p class="member-role">项目负责人</p>
+                <p class="member-desc">负责项目整体规划和协调</p>
+              </div>
+              <div class="team-member">
+                <div class="member-avatar">刘</div>
+                <h4 class="member-name">刘瑞</h4>
+                <p class="member-role">前端开发</p>
+                <p class="member-desc">负责网站界面和交互开发</p>
+              </div>
+              <div class="team-member">
+                <div class="member-avatar">王</div>
+                <h4 class="member-name">王兴梦</h4>
+                <p class="member-role">内容编辑</p>
+                <p class="member-desc">负责民族文化内容整理</p>
+              </div>
+              <div class="team-member">
+                <div class="member-avatar">石</div>
+                <h4 class="member-name">石多娇</h4>
+                <p class="member-role">UI设计</p>
+                <p class="member-desc">负责网站视觉设计</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 联系方式 -->
+          <div class="contact-section" id="contact">
+            <h2 class="section-title">联系我们</h2>
+            <div class="contact-grid">
+              <div class="contact-card">
+                <div class="contact-icon">📧</div>
+                <h4 class="contact-title">电子邮箱</h4>
+                <p class="contact-value">
+                  <a href="mailto:contact@56nations.com" class="contact-link">
+                    contact@56nations.com
+                  </a>
+                </p>
+              </div>
+              <div class="contact-card">
+                <div class="contact-icon">📱</div>
+                <h4 class="contact-title">联系电话</h4>
+                <p class="contact-value">400-888-8888</p>
+              </div>
+              <div class="contact-card">
+                <div class="contact-icon">🌐</div>
+                <h4 class="contact-title">官方网站</h4>
+                <p class="contact-value">
+                  <a href="https://www.56nations.com" class="contact-link" target="_blank">
+                    www.56nations.com
+                  </a>
+                </p>
+              </div>
+              <div class="contact-card">
+                <div class="contact-icon">📍</div>
+                <h4 class="contact-title">项目地址</h4>
+                <p class="contact-value">北京市朝阳区民族文化园</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 技术栈 -->
+          <div class="tech-section">
+            <h2 class="section-title">技术栈</h2>
+            <div class="tech-grid">
+              <div class="tech-item">
+                <div class="tech-icon">🌐</div>
+                <div class="tech-name">HTML5</div>
+              </div>
+              <div class="tech-item">
+                <div class="tech-icon">🎨</div>
+                <div class="tech-name">CSS3</div>
+              </div>
+              <div class="tech-item">
+                <div class="tech-icon">⚡</div>
+                <div class="tech-name">JavaScript</div>
+              </div>
+              <div class="tech-item">
+                <div class="tech-icon">📱</div>
+                <div class="tech-name">响应式设计</div>
+              </div>
+              <div class="tech-item">
+                <div class="tech-icon">🎯</div>
+                <div class="tech-name">Font Awesome</div>
+              </div>
+              <div class="tech-item">
+                <div class="tech-icon">🔧</div>
+                <div class="tech-name">LocalStorage</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="protection-banner">
+        <div class="container">
+          <div class="protection-content">
+            <span class="protection-icon">🤝</span>
+            <span class="protection-text">
+              铸牢中华民族共同体意识，促进各民族像石榴籽一样紧紧抱在一起
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-icon">民</div>
+            <span>中华56民族</span>
+          </div>
+          <p class="footer-description">
+            致力于记录、展示和传承中国各民族的文化遗产，促进民族团结与文化交流。
+          </p>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">快速导航</h4>
+          <div class="footer-links">
+            <a href="nations.html" class="footer-link">民族名录</a>
+            <a href="culture.html" class="footer-link">文化专题</a>
+            <a href="timeline.html" class="footer-link">历史时间轴</a>
+            <a href="quiz.html" class="footer-link">答题闯关</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">关于我们</h4>
+          <div class="footer-links">
+            <a href="about.html" class="footer-link">项目介绍</a>
+            <a href="about.html#team" class="footer-link">团队成员</a>
+            <a href="about.html#contact" class="footer-link">联系方式</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">相关链接</h4>
+          <div class="footer-links">
+            <a href="https://www.gov.cn" target="_blank" class="footer-link">中国政府网</a>
+            <a href="https://www.nlc.cn" target="_blank" class="footer-link">国家图书馆</a>
+            <a href="https://www.ihchina.cn" target="_blank" class="footer-link">中国非遗网</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 中华56民族. 保留所有权利. | 致力于民族文化传承与保护</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/about.js"></script>
+</body>
+</html>

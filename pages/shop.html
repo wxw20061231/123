@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>民族特色商品 - 中华56民族</title>
+  <meta name="description" content="购买各民族特色手工艺品、服饰、饰品、美食等特色商品。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .shop-page {
+      padding-top: 64px;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #FF6B35 0%, #E65100 100%);
+      color: white;
+      padding: var(--spacing-xxl) 0;
+      text-align: center;
+    }
+
+    .shop-content {
+      padding: var(--spacing-xxl) 0;
+    }
+
+    .shop-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-lg);
+    }
+
+    /* 购物车图标 */
+    .cart-icon {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: var(--color-zhu-red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transition: all var(--transition-normal);
+    }
+
+    .cart-icon:hover {
+      transform: scale(1.1);
+      background: #B71C1C;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 24px;
+      height: 24px;
+      background: #FF5722;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* 筛选栏 */
+    .filter-bar {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: var(--spacing-xl);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-lg);
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .filter-label {
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .filter-options {
+      display: flex;
+      gap: var(--spacing-xs);
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: var(--spacing-xs) var(--spacing-md);
+      border: 1px solid #ddd;
+      border-radius: var(--radius-full);
+      background: white;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--color-zhu-red);
+      color: white;
+      border-color: var(--color-zhu-red);
+    }
+
+    .search-filter {
+      margin-left: auto;
+      position: relative;
+    }
+
+    .search-filter input {
+      padding: var(--spacing-sm) var(--spacing-lg);
+      padding-right: 40px;
+      border: 1px solid #ddd;
+      border-radius: var(--radius-full);
+      width: 250px;
+      font-size: 0.95rem;
+    }
+
+    .search-filter input:focus {
+      outline: none;
+      border-color: var(--color-zhu-red);
+    }
+
+    .search-filter button {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-tertiary);
+      cursor: pointer;
+    }
+
+    /* 商品网格 */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--spacing-xl);
+    }
+
+    .product-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 220px;
+      background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 4px 12px;
+      background: var(--color-zhu-red);
+      color: white;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .product-badge.handmade {
+      background: #4CAF50;
+    }
+
+    .product-badge.limited {
+      background: #FF9800;
+    }
+
+    .product-info {
+      padding: var(--spacing-lg);
+    }
+
+    .product-nation {
+      font-size: 0.85rem;
+      color: var(--color-zhu-red);
+      font-weight: 500;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .product-name {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .product-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: var(--spacing-md);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .product-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-zhu-red);
+    }
+
+    .product-price .original {
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      text-decoration: line-through;
+      margin-left: var(--spacing-sm);
+      font-weight: 400;
+    }
+
+    .add-to-cart {
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: var(--color-zhu-red);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+
+    .add-to-cart:hover {
+      background: #B71C1C;
+      transform: scale(1.05);
+    }
+
+    /* 分类展示 */
+    .category-section {
+      margin-bottom: var(--spacing-xxl);
+    }
+
+    .category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .category-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .category-title i {
+      color: var(--color-zhu-red);
+    }
+
+    .view-more {
+      color: var(--color-zhu-red);
+      text-decoration: none;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      transition: color var(--transition-fast);
+    }
+
+    .view-more:hover {
+      color: #B71C1C;
+    }
+
+    /* 购物车弹窗 */
+    .cart-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      justify-content: flex-end;
+    }
+
+    .cart-modal.active {
+      display: flex;
+    }
+
+    .cart-panel {
+      width: 400px;
+      max-width: 100%;
+      height: 100%;
+      background: white;
+      padding: var(--spacing-xl);
+      overflow-y: auto;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-xl);
+      padding-bottom: var(--spacing-lg);
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .close-cart {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: color var(--transition-fast);
+    }
+
+    .close-cart:hover {
+      color: var(--text-primary);
+    }
+
+    .cart-items {
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .cart-item {
+      display: flex;
+      gap: var(--spacing-md);
+      padding: var(--spacing-md) 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .cart-item-image {
+      width: 80px;
+      height: 80px;
+      background: var(--background-color);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 600;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .cart-item-price {
+      color: var(--color-zhu-red);
+      font-weight: 600;
+    }
+
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      margin-top: var(--spacing-sm);
+    }
+
+    .quantity-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #ddd;
+      background: white;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+
+    .quantity-btn:hover {
+      background: var(--background-color);
+    }
+
+    .cart-item-quantity {
+      font-weight: 600;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .remove-item {
+      color: #f44336;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-left: auto;
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: var(--spacing-xxl) 0;
+      color: var(--text-secondary);
+    }
+
+    .cart-empty-icon {
+      font-size: 4rem;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .cart-summary {
+      border-top: 2px solid #eee;
+      padding-top: var(--spacing-lg);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--spacing-sm);
+      font-size: 0.95rem;
+    }
+
+    .summary-row.total {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-zhu-red);
+      margin-top: var(--spacing-md);
+      padding-top: var(--spacing-md);
+      border-top: 1px solid #eee;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      padding: var(--spacing-md);
+      background: var(--color-zhu-red);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1.125rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: var(--spacing-lg);
+      transition: all var(--transition-fast);
+    }
+
+    .checkout-btn:hover {
+      background: #B71C1C;
+    }
+
+    .checkout-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* 特色推荐 */
+    .featured-banner {
+      background: linear-gradient(135deg, #FF6B35 0%, #E65100 100%);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xxl);
+      margin-bottom: var(--spacing-xxl);
+      color: white;
+      text-align: center;
+    }
+
+    .featured-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .featured-desc {
+      font-size: 1.125rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .filter-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-filter {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      .search-filter input {
+        width: 100%;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+      }
+
+      .cart-panel {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 头部导航 -->
+  <header class="header">
+    <div class="container header-content">
+      <a href="../index.html" class="logo">
+        <div class="logo-icon">民</div>
+        <span>中华56民族</span>
+      </a>
+      
+      <nav class="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="nations.html" class="nav-link">民族名录</a>
+        <a href="culture.html" class="nav-link">文化专题</a>
+        <a href="timeline.html" class="nav-link">历史时间轴</a>
+        <a href="interactive.html" class="nav-link">互动体验</a>
+        <a href="quiz.html" class="nav-link">答题闯关</a>
+        <a href="shop.html" class="nav-link active">特色商品</a>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="search-box">
+          <input type="text" placeholder="搜索民族、文化...">
+          <button class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div class="mobile-menu">
+    <a href="../index.html" class="nav-link">首页</a>
+    <a href="nations.html" class="nav-link">民族名录</a>
+    <a href="culture.html" class="nav-link">文化专题</a>
+    <a href="timeline.html" class="nav-link">历史时间轴</a>
+    <a href="interactive.html" class="nav-link">互动体验</a>
+    <a href="quiz.html" class="nav-link">答题闯关</a>
+    <a href="shop.html" class="nav-link active">特色商品</a>
+  </div>
+
+  <!-- 主要内容 -->
+  <main class="shop-page">
+    <!-- 页面头部 -->
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">民族特色商品</h1>
+        <p class="page-description">精选各民族手工艺品、服饰、饰品、美食等特色商品</p>
+      </div>
+    </div>
+
+    <!-- 特色推荐 -->
+    <div class="shop-content">
+      <div class="shop-container">
+        <div class="featured-banner">
+          <h2 class="featured-title">🎁 传承民族工艺，支持手艺人</h2>
+          <p class="featured-desc">
+            每一件商品都承载着民族文化的精髓，您的购买将直接支持民族手工艺人
+          </p>
+        </div>
+
+        <!-- 筛选栏 -->
+        <div class="filter-bar">
+          <div class="filter-group">
+            <span class="filter-label">分类：</span>
+            <div class="filter-options" id="categoryFilters">
+              <button class="filter-btn active" data-category="all">全部</button>
+              <button class="filter-btn" data-category="craft">手工艺品</button>
+              <button class="filter-btn" data-category="clothing">民族服饰</button>
+              <button class="filter-btn" data-category="jewelry">饰品配饰</button>
+              <button class="filter-btn" data-category="food">特色美食</button>
+              <button class="filter-btn" data-category="art">艺术收藏</button>
+            </div>
+          </div>
+          
+          <div class="filter-group">
+            <span class="filter-label">民族：</span>
+            <div class="filter-options" id="nationFilters">
+              <button class="filter-btn active" data-nation="all">全部</button>
+              <button class="filter-btn" data-nation="miao">苗族</button>
+              <button class="filter-btn" data-nation="tibetan">藏族</button>
+              <button class="filter-btn" data-nation="mongolian">蒙古族</button>
+              <button class="filter-btn" data-nation="uyghur">维吾尔族</button>
+              <button class="filter-btn" data-nation="zhuang">壮族</button>
+            </div>
+          </div>
+
+          <div class="search-filter">
+            <input type="text" id="productSearch" placeholder="搜索商品...">
+            <button><i class="fas fa-search"></i></button>
+          </div>
+        </div>
+
+        <!-- 热门手工艺品 -->
+        <div class="category-section">
+          <div class="category-header">
+            <h3 class="category-title">
+              <i class="fas fa-fire"></i>
+              热门手工艺品
+            </h3>
+            <a href="#" class="view-more">
+              查看更多 <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+          <div class="products-grid" id="productsGrid">
+            <!-- 商品将由JS动态生成 -->
+          </div>
+        </div>
+
+        <!-- 民族服饰 -->
+        <div class="category-section">
+          <div class="category-header">
+            <h3 class="category-title">
+              <i class="fas fa-tshirt"></i>
+              民族服饰
+            </h3>
+            <a href="#" class="view-more">
+              查看更多 <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+          <div class="products-grid" id="clothingGrid">
+            <!-- 服饰将由JS动态生成 -->
+          </div>
+        </div>
+
+        <!-- 特色美食 -->
+        <div class="category-section">
+          <div class="category-header">
+            <h3 class="category-title">
+              <i class="fas fa-utensils"></i>
+              特色美食
+            </h3>
+            <a href="#" class="view-more">
+              查看更多 <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+          <div class="products-grid" id="foodGrid">
+            <!-- 美食将由JS动态生成 -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 购物车图标 -->
+  <div class="cart-icon" id="cartIcon">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="cart-count" id="cartCount">0</span>
+  </div>
+
+  <!-- 购物车弹窗 -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-panel">
+      <div class="cart-header">
+        <h3 class="cart-title">购物车</h3>
+        <button class="close-cart" id="closeCart">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="cart-items" id="cartItems">
+        <!-- 购物车商品将由JS动态生成 -->
+      </div>
+      
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>商品总数</span>
+          <span id="totalItems">0 件</span>
+        </div>
+        <div class="summary-row">
+          <span>商品总额</span>
+          <span id="subtotal">¥0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>运费</span>
+          <span>免运费</span>
+        </div>
+        <div class="summary-row total">
+          <span>合计</span>
+          <span id="totalPrice">¥0.00</span>
+        </div>
+        <button class="checkout-btn" id="checkoutBtn">去结算</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="protection-banner">
+        <div class="container">
+          <div class="protection-content">
+            <span class="protection-icon">🤝</span>
+            <span class="protection-text">
+              铸牢中华民族共同体意识，促进各民族像石榴籽一样紧紧抱在一起
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-icon">民</div>
+            <span>中华56民族</span>
+          </div>
+          <p class="footer-description">
+            致力于记录、展示和传承中国各民族的文化遗产，促进民族团结与文化交流。
+          </p>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">快速导航</h4>
+          <div class="footer-links">
+            <a href="nations.html" class="footer-link">民族名录</a>
+            <a href="culture.html" class="footer-link">文化专题</a>
+            <a href="timeline.html" class="footer-link">历史时间轴</a>
+            <a href="quiz.html" class="footer-link">答题闯关</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">关于我们</h4>
+          <div class="footer-links">
+            <a href="about.html" class="footer-link">项目介绍</a>
+            <a href="about.html#team" class="footer-link">团队成员</a>
+            <a href="about.html#contact" class="footer-link">联系方式</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">相关链接</h4>
+          <div class="footer-links">
+            <a href="https://www.gov.cn" target="_blank" class="footer-link">中国政府网</a>
+            <a href="https://www.nlc.cn" target="_blank" class="footer-link">国家图书馆</a>
+            <a href="https://www.ihchina.cn" target="_blank" class="footer-link">中国非遗网</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 中华56民族. 保留所有权利. | 致力于民族文化传承与保护</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/shop.js"></script>
+</body>
+</html>

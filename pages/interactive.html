@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>互动体验 - 中华56民族</title>
+  <meta name="description" content="通过虚拟试装、乐器体验等互动功能，沉浸式感受民族文化。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .interactive-page {
+      padding-top: 64px;
+      min-height: 100vh;
+      background-image: url('../images/1.背景.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .page-header {
+      background: rgba(255, 152, 0, 0.85);
+      color: white;
+      padding: var(--spacing-xxl) 0;
+      text-align: center;
+    }
+
+    .interactive-section {
+      padding: var(--spacing-xxl) 0;
+    }
+
+    .interactive-section .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-lg);
+    }
+
+    .interactive-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-normal);
+      height: 650px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .interactive-content {
+      flex: 1;
+      padding: var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .interactive-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .interactive-header {
+      padding: var(--spacing-md);
+      color: white;
+      text-align: center;
+    }
+
+    .interactive-card:nth-child(1) .interactive-header {
+      background: linear-gradient(135deg, #E91E63, #C2185B);
+    }
+
+    .interactive-card:nth-child(2) .interactive-header {
+      background: linear-gradient(135deg, #2196F3, #1976D2);
+    }
+
+    .interactive-card:nth-child(3) .interactive-header {
+      background: linear-gradient(135deg, #4CAF50, #388E3C);
+    }
+
+    .interactive-card:nth-child(4) .interactive-header {
+      background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+    }
+
+    .interactive-icon {
+      font-size: 1.5rem;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .interactive-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .interactive-desc {
+      opacity: 0.85;
+      font-size: 0.75rem;
+    }
+
+
+
+    .costume-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-lg);
+      height: 100%;
+      flex: 1;
+    }
+
+    .costume-display {
+      width: 100%;
+      height: 460px;
+      background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+      padding-top: var(--spacing-md);
+    }
+
+    .costume-display::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .costume-selector {
+      display: flex;
+      gap: var(--spacing-sm);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .costume-btn {
+      padding: 6px 12px;
+      border: 1px solid #ddd;
+      border-radius: var(--radius-full);
+      background: white;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      transition: all var(--transition-fast);
+    }
+
+    .costume-btn:hover,
+    .costume-btn.active {
+      border-color: var(--color-zhu-red);
+      color: var(--color-zhu-red);
+      background: rgba(211, 47, 47, 0.1);
+    }
+
+    .instrument-display {
+      width: 100%;
+      height: 460px;
+      background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .instrument-display::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+      animation: shimmer 2s infinite;
+    }
+
+    .instrument-selector {
+      display: flex;
+      gap: var(--spacing-sm);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .instrument-btn {
+      padding: 4px 10px;
+      border: 1px solid #ddd;
+      border-radius: var(--radius-full);
+      background: white;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      transition: all var(--transition-fast);
+    }
+
+    .instrument-btn:hover,
+    .instrument-btn.active {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      background: rgba(33, 150, 243, 0.1);
+    }
+
+    .embroidery-display {
+      width: 100%;
+      height: 460px;
+      background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .embroidery-display::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
+      animation: shimmer 2s infinite;
+    }
+
+    .embroidery-selector {
+      display: flex;
+      gap: var(--spacing-sm);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .embroidery-btn {
+      padding: 4px 10px;
+      border: 1px solid #ddd;
+      border-radius: var(--radius-full);
+      background: white;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      transition: all var(--transition-fast);
+    }
+
+    .embroidery-btn:hover,
+    .embroidery-btn.active {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+      background: rgba(33, 150, 243, 0.1);
+    }
+
+    .language-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: var(--spacing-md);
+      flex: 1;
+    }
+
+    .game-area {
+      text-align: center;
+      padding: var(--spacing-xl);
+      background: var(--background-color);
+      border-radius: var(--radius-md);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .language-card {
+      text-align: center;
+      padding: var(--spacing-lg);
+      background: var(--background-color);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .language-card:hover {
+      background: #e8e6e3;
+    }
+
+    .language-hello {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--color-zhu-red);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .language-nation {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .food-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: var(--spacing-md);
+      flex: 1;
+    }
+
+    .food-card {
+      text-align: center;
+      padding: var(--spacing-md);
+      background: var(--background-color);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .food-card:hover {
+      background: #f8f7f5;
+      transform: translateY(-2px);
+    }
+
+    .food-illustration {
+      margin-bottom: var(--spacing-sm);
+      height: 120px;
+      width: 100%;
+      background-size: cover;
+      background-position: center;
+      border-radius: var(--radius-md);
+    }
+
+    .food-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .food-desc {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      line-height: 1.4;
+    }
+
+    .game-area {
+      text-align: center;
+      padding: var(--spacing-xl);
+      background: var(--background-color);
+      border-radius: var(--radius-md);
+    }
+
+    .game-pattern {
+      font-size: 4rem;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .game-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-lg);
+    }
+
+    .game-option {
+      padding: var(--spacing-md);
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .game-option:hover {
+      border-color: var(--color-zhu-red);
+    }
+
+    .game-option.correct {
+      border-color: #4CAF50;
+      background: rgba(76, 175, 80, 0.1);
+    }
+
+    .game-option.wrong {
+      border-color: #f44336;
+      background: rgba(244, 67, 54, 0.1);
+    }
+
+    .start-btn {
+      padding: var(--spacing-md) var(--spacing-xl);
+      background: var(--color-zhu-red);
+      color: white;
+      border-radius: var(--radius-full);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all var(--transition-fast);
+    }
+
+    .start-btn:hover {
+      background: #B71C1C;
+      transform: translateY(-2px);
+    }
+
+    .score-display {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .food-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .food-modal.active {
+      display: flex;
+    }
+
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      position: relative;
+      width: 90%;
+      max-width: 500px;
+      max-height: 85vh;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      overflow-y: auto;
+      animation: modalSlideIn 0.3s ease;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      z-index: 10;
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 0, 0, 0.2);
+      transform: rotate(90deg);
+    }
+
+    .modal-header {
+      padding: var(--spacing-xl);
+      background: linear-gradient(135deg, #FF9800, #F57C00);
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-illustration {
+      width: 200px;
+      height: 120px;
+      margin: 0 auto var(--spacing-md);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .modal-illustration img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .modal-body {
+      padding: var(--spacing-lg);
+    }
+
+    .modal-section {
+      display: flex;
+      gap: var(--spacing-md);
+      padding: var(--spacing-md);
+      background: #f8f7f5;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .section-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .section-content {
+      flex: 1;
+    }
+
+    .section-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 var(--spacing-xs) 0;
+    }
+
+    .section-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .section-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .section-list li {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      padding: var(--spacing-xs) 0;
+      padding-left: var(--spacing-lg);
+      position: relative;
+    }
+
+    .section-list li::before {
+      content: '•';
+      position: absolute;
+      left: var(--spacing-xs);
+      color: var(--color-primary);
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .interactive-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        width: 95%;
+        max-height: 90vh;
+      }
+
+      .modal-section {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 头部导航 -->
+  <header class="header">
+    <div class="container header-content">
+      <a href="../index.html" class="logo">
+        <div class="logo-icon">民</div>
+        <span>中华56民族</span>
+      </a>
+      
+      <nav class="main-nav">
+        <a href="../index.html" class="nav-link">首页</a>
+        <a href="nations.html" class="nav-link">民族名录</a>
+        <a href="culture.html" class="nav-link">文化专题</a>
+        <a href="timeline.html" class="nav-link">历史时间轴</a>
+        <a href="interactive.html" class="nav-link active">互动体验</a>
+        <a href="quiz.html" class="nav-link">答题闯关</a>
+        <a href="shop.html" class="nav-link">特色商品</a>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="search-box">
+          <input type="text" placeholder="搜索民族、文化...">
+          <button class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div class="mobile-menu">
+    <a href="../index.html" class="nav-link">首页</a>
+    <a href="nations.html" class="nav-link">民族名录</a>
+    <a href="culture.html" class="nav-link">文化专题</a>
+    <a href="timeline.html" class="nav-link">历史时间轴</a>
+    <a href="interactive.html" class="nav-link active">互动体验</a>
+    <a href="quiz.html" class="nav-link">答题闯关</a>
+    <a href="shop.html" class="nav-link">特色商品</a>
+  </div>
+
+  <!-- 主要内容 -->
+  <main class="interactive-page">
+    <!-- 页面头部 -->
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">互动体验</h1>
+        <p class="page-description">沉浸式感受各民族文化的魅力</p>
+      </div>
+    </div>
+
+    <!-- 互动功能区 -->
+    <section class="interactive-section">
+      <div class="container">
+        <div class="interactive-grid">
+          <!-- 虚拟试装 -->
+          <div class="interactive-card">
+            <div class="interactive-header">
+              <div class="interactive-icon">👘</div>
+              <h3 class="interactive-title">虚拟试装</h3>
+              <p class="interactive-desc">体验各民族传统服饰</p>
+            </div>
+            <div class="interactive-content">
+              <div class="costume-preview">
+                <div class="costume-display" id="costumeDisplay"></div>
+                <div class="costume-selector">
+                  <button class="costume-btn active" data-costume="hanfu" data-icon="👘">汉服</button>
+                  <button class="costume-btn" data-costume="other" data-icon="👗">其他民族</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 乐器识别 -->
+          <div class="interactive-card">
+            <div class="interactive-header">
+              <div class="interactive-icon">🎵</div>
+              <h3 class="interactive-title">乐器识别</h3>
+              <p class="interactive-desc">识别民族乐器的种类</p>
+            </div>
+            <div class="interactive-content">
+              <div class="instrument-display" id="instrumentDisplay"></div>
+              <div class="instrument-selector">
+                <button class="instrument-btn active" data-instrument="1">1</button>
+                <button class="instrument-btn" data-instrument="2">2</button>
+                <button class="instrument-btn" data-instrument="3">3</button>
+                <button class="instrument-btn" data-instrument="4">4</button>
+                <button class="instrument-btn" data-instrument="5">5</button>
+                <button class="instrument-btn" data-instrument="6">6</button>
+                <button class="instrument-btn" data-instrument="7">7</button>
+                <button class="instrument-btn" data-instrument="8">8</button>
+                <button class="instrument-btn" data-instrument="9">9</button>
+                <button class="instrument-btn" data-instrument="10">10</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 民族美食 -->
+          <div class="interactive-card">
+            <div class="interactive-header">
+              <div class="interactive-icon">🍜</div>
+              <h3 class="interactive-title">民族美食</h3>
+              <p class="interactive-desc">品味各民族特色美食</p>
+            </div>
+            <div class="interactive-content">
+              <div class="food-cards">
+                <div class="food-card" data-food="dumpling">
+                  <div class="food-illustration" style="background-image: url('../images/2.饺子.jpg'); background-size: cover; background-position: center;"></div>
+                  <div class="food-name">汉族・饺子</div>
+                  <div class="food-desc">北方春节必备传统美食，象征"更岁交子"的美好寓意</div>
+                </div>
+                <div class="food-card" data-food="handmeat">
+                  <div class="food-illustration" style="background-image: url('../images/2.手把肉.jpg'); background-size: cover; background-position: center;"></div>
+                  <div class="food-name">蒙古族・手把肉</div>
+                  <div class="food-desc">草原游牧民族的传统肉食，手抓食用体现豪迈饮食文化</div>
+                </div>
+                <div class="food-card" data-food="tsampa">
+                  <div class="food-illustration" style="background-image: url('../images/2.糌粑.jpg'); background-size: cover; background-position: center;"></div>
+                  <div class="food-name">藏族・糌粑</div>
+                  <div class="food-desc">藏族牧民的日常主食，由青稞面与酥油、茶揉制而成</div>
+                </div>
+                <div class="food-card" data-food="pilaf">
+                  <div class="food-illustration" style="background-image: url('../images/2.手抓饭.jpg'); background-size: cover; background-position: center;"></div>
+                  <div class="food-name">维吾尔族・手抓饭</div>
+                  <div class="food-desc">节庆场合与招待客人的经典主食，油香浓郁、营养丰富</div>
+                </div>
+                <div class="food-card" data-food="coloredrice">
+                  <div class="food-illustration" style="background-image: url('../images/2.五色糯米饭.jpg'); background-size: cover; background-position: center;"></div>
+                  <div class="food-name">壮族・五色糯米饭</div>
+                  <div class="food-desc">三月三歌圩节的必备传统食品，象征着五谷丰登的美好祝愿</div>
+                </div>
+                <div class="food-card" data-food="sourfish">
+                  <div class="food-illustration" style="background-image: url('../images/2.酸汤鱼.jpg'); background-size: cover; background-position: center;"></div>
+                  <div class="food-name">苗族・酸汤鱼</div>
+                  <div class="food-desc">苗家招待客人的招牌菜肴，以番茄酸汤煮制鲜鱼，酸辣开胃</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 刺绣欣赏 -->
+          <div class="interactive-card">
+            <div class="interactive-header">
+              <div class="interactive-icon">🎨</div>
+              <h3 class="interactive-title">刺绣欣赏</h3>
+              <p class="interactive-desc">欣赏各民族精美刺绣作品</p>
+            </div>
+            <div class="interactive-content">
+              <div class="embroidery-display" id="embroideryDisplay"></div>
+              <div class="embroidery-selector">
+                <button class="embroidery-btn active" data-embroidery="1">1</button>
+                <button class="embroidery-btn" data-embroidery="2">2</button>
+                <button class="embroidery-btn" data-embroidery="3">3</button>
+                <button class="embroidery-btn" data-embroidery="4">4</button>
+                <button class="embroidery-btn" data-embroidery="5">5</button>
+                <button class="embroidery-btn" data-embroidery="6">6</button>
+                <button class="embroidery-btn" data-embroidery="7">7</button>
+                <button class="embroidery-btn" data-embroidery="8">8</button>
+                <button class="embroidery-btn" data-embroidery="9">9</button>
+                <button class="embroidery-btn" data-embroidery="10">10</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 美食资料弹窗 -->
+  <div class="food-modal" id="foodModal">
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <div class="modal-header">
+        <div class="modal-illustration" id="modalIllustration"></div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+      </div>
+      <div class="modal-body">
+        <div class="modal-section">
+          <div class="section-icon">📍</div>
+          <div class="section-content">
+            <h4 class="section-title">分布地区</h4>
+            <p class="section-text" id="modalRegion"></p>
+          </div>
+        </div>
+        <div class="modal-section">
+          <div class="section-icon">🌟</div>
+          <div class="section-content">
+            <h4 class="section-title">文化寓意</h4>
+            <p class="section-text" id="modalCulture"></p>
+          </div>
+        </div>
+        <div class="modal-section">
+          <div class="section-icon">👩🍳</div>
+          <div class="section-content">
+            <h4 class="section-title">核心做法</h4>
+            <ul class="section-list" id="modalMethods"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="protection-banner">
+        <div class="container">
+          <div class="protection-content">
+            <span class="protection-icon">🤝</span>
+            <span class="protection-text">
+              铸牢中华民族共同体意识，促进各民族像石榴籽一样紧紧抱在一起
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-icon">民</div>
+            <span>中华56民族</span>
+          </div>
+          <p class="footer-description">
+            致力于记录、展示和传承中国各民族的文化遗产，促进民族团结与文化交流。
+          </p>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">快速导航</h4>
+          <div class="footer-links">
+            <a href="nations.html" class="footer-link">民族名录</a>
+            <a href="culture.html" class="footer-link">文化专题</a>
+            <a href="timeline.html" class="footer-link">历史时间轴</a>
+            <a href="quiz.html" class="footer-link">答题闯关</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">关于我们</h4>
+          <div class="footer-links">
+            <a href="about.html" class="footer-link">项目介绍</a>
+            <a href="about.html#team" class="footer-link">团队成员</a>
+            <a href="about.html#contact" class="footer-link">联系方式</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">相关链接</h4>
+          <div class="footer-links">
+            <a href="https://www.gov.cn" target="_blank" class="footer-link">中国政府网</a>
+            <a href="https://www.nlc.cn" target="_blank" class="footer-link">国家图书馆</a>
+            <a href="https://www.ihchina.cn" target="_blank" class="footer-link">中国非遗网</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 中华56民族. 保留所有权利. | 致力于民族文化传承与保护</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/interactive.js"></script>
+</body>
+</html>
