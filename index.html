@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中华56民族 - 中国各民族文化历史</title>
+  <meta name="description" content="探索中国56个民族的独特文化、历史传承、传统习俗、艺术瑰宝。深入了解中华民族多元一体的文化格局。">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* 首页特有样式 */
+    .hero-section {
+      min-height: 100vh;
+      background: url('images/首页背景图.jpg') no-repeat center center;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding-top: 64px;
+      position: relative;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      padding: var(--spacing-xl);
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-md);
+      font-family: var(--font-family-title);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: var(--spacing-xl);
+      opacity: 0.95;
+    }
+
+    .hero-description {
+      font-size: 1.125rem;
+      margin-bottom: var(--spacing-xxl);
+      opacity: 0.9;
+      line-height: 1.8;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-btn {
+      padding: var(--spacing-md) var(--spacing-xl);
+      border-radius: var(--radius-full);
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all var(--transition-normal);
+    }
+
+    .hero-btn-primary {
+      background: white;
+      color: var(--color-zhu-red);
+    }
+
+    .hero-btn-primary:hover {
+      background: var(--color-ming-yellow);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .hero-btn-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .hero-btn-secondary:hover {
+      background: white;
+      color: var(--color-zhu-red);
+    }
+
+    /* 特色板块 */
+    .features-section {
+      padding: var(--spacing-xxl) 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xxl);
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-md);
+      font-family: var(--font-family-title);
+      color: var(--text-primary);
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .feature-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-xl);
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      text-align: center;
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto var(--spacing-lg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+
+    .feature-card:nth-child(1) .feature-icon {
+      background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+    }
+
+    .feature-card:nth-child(2) .feature-icon {
+      background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
+    }
+
+    .feature-card:nth-child(3) .feature-icon {
+      background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+    }
+
+    .feature-card:nth-child(4) .feature-icon {
+      background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .feature-description {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* 民族预览 */
+    .nations-preview {
+      padding: var(--spacing-xxl) 0;
+      background: white;
+    }
+
+    .nations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-xl);
+    }
+
+    .nation-item {
+      text-align: center;
+      padding: var(--spacing-md);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+
+    .nation-item:hover {
+      background: var(--background-color);
+      transform: scale(1.05);
+    }
+
+    .nation-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-zhu-red), #B71C1C);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--spacing-sm);
+      color: white;
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+
+    .nation-name {
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+
+    .view-all-btn {
+      display: block;
+      width: fit-content;
+      margin: var(--spacing-xl) auto 0;
+    }
+
+    /* 统计数据 */
+    .stats-section {
+      padding: var(--spacing-xxl) 0;
+      background: linear-gradient(135deg, var(--color-qing-dai), #37474F);
+      color: white;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-xl);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: var(--spacing-sm);
+      font-family: var(--font-family-title);
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.25rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .hero-btn {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 头部导航 -->
+  <header class="header">
+    <div class="container header-content">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">民</div>
+        <span>中华56民族</span>
+      </a>
+      
+      <nav class="main-nav">
+        <a href="index.html" class="nav-link active">首页</a>
+        <a href="pages/nations.html" class="nav-link">民族名录</a>
+        <a href="pages/culture.html" class="nav-link">文化专题</a>
+        <a href="pages/timeline.html" class="nav-link">历史时间轴</a>
+        <a href="pages/interactive.html" class="nav-link">互动体验</a>
+        <a href="pages/quiz.html" class="nav-link">答题闯关</a>
+        <a href="pages/shop.html" class="nav-link">特色商品</a>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="search-box">
+          <input type="text" placeholder="搜索民族、文化...">
+          <button class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+        <button class="mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 移动端菜单 -->
+  <div class="mobile-menu">
+    <a href="index.html" class="nav-link active">首页</a>
+    <a href="pages/nations.html" class="nav-link">民族名录</a>
+    <a href="pages/culture.html" class="nav-link">文化专题</a>
+    <a href="pages/timeline.html" class="nav-link">历史时间轴</a>
+    <a href="pages/interactive.html" class="nav-link">互动体验</a>
+    <a href="pages/quiz.html" class="nav-link">答题闯关</a>
+    <a href="pages/shop.html" class="nav-link">特色商品</a>
+  </div>
+
+  <!-- 主要内容 -->
+  <main>
+    <!-- Hero区域 -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1 class="hero-title">中华56民族</h1>
+        <p class="hero-subtitle">多元一体 · 和而不同</p>
+        <p class="hero-description">
+          探索中国56个民族的独特文化、历史传承、传统习俗、艺术瑰宝。<br>
+          深入了解中华民族多元一体的文化格局。
+        </p>
+        <div class="hero-buttons">
+          <a href="pages/nations.html" class="hero-btn hero-btn-primary">
+            <i class="fas fa-compass"></i>
+            探索民族
+          </a>
+          <a href="pages/culture.html" class="hero-btn hero-btn-secondary">
+            <i class="fas fa-book-open"></i>
+            文化专题
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 特色板块 -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">探索民族文化</h2>
+          <p class="section-subtitle">深入了解各民族的历史传承与文化特色</p>
+        </div>
+        
+        <div class="feature-cards">
+          <div class="feature-card" onclick="location.href='pages/nations.html'">
+            <div class="feature-icon">🏛️</div>
+            <h3 class="feature-title">民族名录</h3>
+            <p class="feature-description">全面了解中国56个民族的基本信息、分布区域、人口状况等详细资料</p>
+          </div>
+          
+          <div class="feature-card" onclick="location.href='pages/culture.html'">
+            <div class="feature-icon">🎭</div>
+            <h3 class="feature-title">文化专题</h3>
+            <p class="feature-description">探索各民族的艺术、服饰、美食、建筑等丰富多彩的文化元素</p>
+          </div>
+          
+          <div class="feature-card" onclick="location.href='pages/timeline.html'">
+            <div class="feature-icon">📜</div>
+            <h3 class="feature-title">历史时间轴</h3>
+            <p class="feature-description">追溯各民族的发展历程，见证中华民族的融合与繁荣</p>
+          </div>
+          
+          <div class="feature-card" onclick="location.href='pages/interactive.html'">
+            <div class="feature-icon">🎮</div>
+            <h3 class="feature-title">互动体验</h3>
+            <p class="feature-description">通过虚拟试装、乐器体验等互动功能，沉浸式感受民族文化</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 民族预览 -->
+    <section class="nations-preview">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">56个民族</h2>
+          <p class="section-subtitle">点击了解更多民族文化</p>
+        </div>
+        
+        <div class="nations-grid" id="nationsGrid">
+          <!-- 民族列表将由JS动态生成 -->
+        </div>
+        
+        <a href="pages/nations.html" class="btn btn-primary view-all-btn">
+          查看全部民族
+          <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- 统计数据 -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">56</div>
+            <div class="stat-label">个民族</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">项非遗</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">5000+</div>
+            <div class="stat-label">年历史</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">文化传承</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="footer">
+    <div class="container">
+      <div class="protection-banner">
+        <div class="container">
+          <div class="protection-content">
+            <span class="protection-icon">🤝</span>
+            <span class="protection-text">
+              铸牢中华民族共同体意识，促进各民族像石榴籽一样紧紧抱在一起
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <div class="logo-icon">民</div>
+            <span>中华56民族</span>
+          </div>
+          <p class="footer-description">
+            致力于记录、展示和传承中国各民族的文化遗产，促进民族团结与文化交流。
+          </p>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">快速导航</h4>
+          <div class="footer-links">
+            <a href="pages/nations.html" class="footer-link">民族名录</a>
+            <a href="pages/culture.html" class="footer-link">文化专题</a>
+            <a href="pages/timeline.html" class="footer-link">历史时间轴</a>
+            <a href="pages/quiz.html" class="footer-link">答题闯关</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">关于我们</h4>
+          <div class="footer-links">
+            <a href="pages/about.html" class="footer-link">项目介绍</a>
+            <a href="pages/about.html#team" class="footer-link">团队成员</a>
+            <a href="pages/about.html#contact" class="footer-link">联系方式</a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h4 class="footer-title">相关链接</h4>
+          <div class="footer-links">
+            <a href="https://www.gov.cn" target="_blank" class="footer-link">中国政府网</a>
+            <a href="https://www.nlc.cn" target="_blank" class="footer-link">国家图书馆</a>
+            <a href="https://www.ihchina.cn" target="_blank" class="footer-link">中国非遗网</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 中华56民族. 保留所有权利. | 致力于民族文化传承与保护</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 脚本文件 -->
+  <script src="js/main.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>
